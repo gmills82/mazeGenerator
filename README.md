@@ -1,4 +1,4 @@
-# Maze Generation 迷路
+# Maze Generation
 
 Maze generation code, inspired by working through [Mazes for
 Programmers](https://pragprog.com/book/jbmaze/mazes-for-programmers).
