@@ -1,3 +1,5 @@
+package millscraft.mazeGenerator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,6 +14,11 @@ public class Grid {
 	private Integer rowSize;
 	private Integer columnSize;
 
+	/**
+	 *
+	 * @param rowSize - height of the maze
+	 * @param columnSize - width of the maze
+	 */
 	public Grid(Integer rowSize, Integer columnSize) {
 		this.rowSize = rowSize;
 		this.columnSize = columnSize;
@@ -26,9 +33,10 @@ public class Grid {
 		this.grid = new ArrayList<List<Cell>>();
 		for(int x = 0; x < rowSize; x++) {
 			ArrayList<Cell> row = new ArrayList<Cell>();
-			grid.set(x, row);
+
+			this.grid.add(row);
 			for(int y = 0; y < columnSize; y++) {
-				row.set(y, new Cell(x,y));
+				row.add(new Cell(x,y));
 			}
 		}
 	}
@@ -41,15 +49,16 @@ public class Grid {
 				//North
 				Optional<Cell> northOption = doesCellExistInGrid(cell.getRow() - 1, cell.getColumn());
 				northOption.ifPresent(cell::setNorth);
+
 				//South
 				Optional<Cell> southOption = doesCellExistInGrid(cell.getRow() + 1, cell.getColumn());
-				southOption.ifPresent(cell::setNorth);
+				southOption.ifPresent(cell::setSouth);
 				//East
 				Optional<Cell> eastOption = doesCellExistInGrid(cell.getRow(), cell.getColumn() + 1);
-				eastOption.ifPresent(cell::setNorth);
+				eastOption.ifPresent(cell::setEast);
 				//West
 				Optional<Cell> westOption = doesCellExistInGrid(cell.getRow(), cell.getColumn() - 1);
-				westOption.ifPresent(cell::setNorth);
+				westOption.ifPresent(cell::setWest);
 			}
 		}
 	}
@@ -76,4 +85,15 @@ public class Grid {
 		return checkedCellOptional;
 	}
 
+	public List<List<Cell>> getGrid() {
+		return grid;
+	}
+
+	public Integer getRowSize() {
+		return rowSize;
+	}
+
+	public Integer getColumnSize() {
+		return columnSize;
+	}
 }

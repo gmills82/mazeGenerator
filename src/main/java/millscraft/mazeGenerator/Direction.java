@@ -1,3 +1,5 @@
+package millscraft.mazeGenerator;
+
 /**
  * @author Grant Mills
  * @since 3/4/18

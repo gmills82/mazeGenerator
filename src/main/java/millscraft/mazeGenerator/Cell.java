@@ -1,3 +1,5 @@
+package millscraft.mazeGenerator;
+
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,13 +26,22 @@ public class Cell {
 		this.neighbors = new EnumMap<Direction, Cell>(Direction.class);
 	}
 
-	//Linked cells are ones that share a passage
-	//Links two cells, bidirectionally is the flag is true
-	private void link(Cell cellToBeLinked, Boolean isBiDirectional) {
-		//Default value
-		if(isBiDirectional == null) {
-			isBiDirectional = true;
-		}
+	/**
+	 * Overriden method where default for biderctional is set to true
+	 * @param cell
+	 */
+	public void link(Cell cell) {
+		this.link(cell, true);
+	}
+
+	/**
+	 * Linked cells are ones that share a passage
+	 * Links two cells, bidirectionally is the flag is true
+	 * @param cellToBeLinked
+	 * @param isBiDirectional
+	 */
+	public void link(Cell cellToBeLinked, Boolean isBiDirectional) {
+
 		this.linkedCells.add(cellToBeLinked);
 		if(isBiDirectional) {
 			Set<Cell> currentlyLinked = cellToBeLinked.getLinkedCells();
@@ -41,12 +52,21 @@ public class Cell {
 		}
 	}
 
-	//Unlinks two cells, bidirectionally if the flag is true
-	private void unlink(Cell cellToBeUnlinked, Boolean isBiDirectional) {
-		//Default value
-		if(isBiDirectional == null) {
-			isBiDirectional = true;
-		}
+	/**
+	 * Overriden method where default for biderctional is set to true
+	 * @param cell
+	 */
+	public void unlink(Cell cell) {
+		this.link(cell, true);
+	}
+
+	/**
+	 * Unlinks two cells, bidirectionally if the flag is true
+	 * @param cellToBeUnlinked
+	 * @param isBiDirectional
+	 */
+	public void unlink(Cell cellToBeUnlinked, Boolean isBiDirectional) {
+
 		if(this.linkedCells.contains(cellToBeUnlinked)) {
 			this.linkedCells.remove(cellToBeUnlinked);
 		}
