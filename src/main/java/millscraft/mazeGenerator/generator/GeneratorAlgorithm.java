@@ -8,5 +8,6 @@ import millscraft.mazeGenerator.Grid;
  */
 public interface GeneratorAlgorithm {
 
+	//TODO: Is there a way to make these Functions?
 	Grid prepareMaze(Grid maze);
 }
