@@ -1,5 +1,8 @@
 package millscraft.mazeGenerator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +12,8 @@ import java.util.Set;
  * @since 3/2/18
  */
 public class Cell {
+	private static final Logger logger = LoggerFactory.getLogger(Cell.class);
+
 	private Integer row;
 	private Integer column;
 	private Set<Cell> linkedCells;
@@ -42,13 +47,17 @@ public class Cell {
 	 */
 	public void link(Cell cellToBeLinked, Boolean isBiDirectional) {
 
-		this.linkedCells.add(cellToBeLinked);
-		if(isBiDirectional) {
-			Set<Cell> currentlyLinked = cellToBeLinked.getLinkedCells();
-			if(!currentlyLinked.contains(this)) {
-				currentlyLinked.add(this);
-				cellToBeLinked.setLinkedCells(currentlyLinked);
+		if(null != cellToBeLinked) {
+			this.linkedCells.add(cellToBeLinked);
+			if (isBiDirectional) {
+				Set<Cell> currentlyLinked = cellToBeLinked.getLinkedCells();
+				if (!currentlyLinked.contains(this)) {
+					currentlyLinked.add(this);
+					cellToBeLinked.setLinkedCells(currentlyLinked);
+				}
 			}
+		}else {
+			logger.info("Null cell was skipped and not linked");
 		}
 	}
 
