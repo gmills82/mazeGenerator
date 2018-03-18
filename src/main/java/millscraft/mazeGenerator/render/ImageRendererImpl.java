@@ -22,10 +22,11 @@ public class ImageRendererImpl implements Renderer<File> {
 	private static final Logger logger = LoggerFactory.getLogger(ImageRendererImpl.class);
 	private static final Integer CELL_SIZE = 10;
 	private static final Integer MAZE_BORDER = 10;
+	private static final Integer WALL_THICKNESS = 1;
 
 	private File doRender(Grid maze) {
-		Integer imageWidth = (MAZE_BORDER * 2) + (CELL_SIZE * maze.getColumnSize());
-		Integer imageHeigth = (MAZE_BORDER * 2) + (CELL_SIZE * maze.getRowSize());
+		Integer imageWidth = (MAZE_BORDER * 2) + ((CELL_SIZE + WALL_THICKNESS) * maze.getColumnSize()) + WALL_THICKNESS;
+		Integer imageHeigth = (MAZE_BORDER * 2) + ((CELL_SIZE + WALL_THICKNESS) * maze.getRowSize()) + WALL_THICKNESS;
 
 		// Picked image type based on response here,
 		// https://stackoverflow.com/questions/32414617/how-to-decide-which-bufferedimage-image-type-to-use
@@ -39,7 +40,7 @@ public class ImageRendererImpl implements Renderer<File> {
 
 		//Stroke for the walls of the maze cells
 		graphics2D.setColor(Color.black);
-		BasicStroke basicStroke = new BasicStroke(1);
+		BasicStroke basicStroke = new BasicStroke(WALL_THICKNESS);
 		graphics2D.setStroke(basicStroke);
 
 		//Iterate over maze and draw borders to the cells
@@ -48,10 +49,10 @@ public class ImageRendererImpl implements Renderer<File> {
 			java.util.List<Cell> row = maze.getGrid().get(x);
 			for(int y = 0; y < row.size(); y++) {
 				Cell currentCell = row.get(y);
-				Integer gridX = currentCell.getColumn() * CELL_SIZE + MAZE_BORDER;
-				Integer gridY = currentCell.getRow() * CELL_SIZE + MAZE_BORDER;
-				Integer gridX2 = gridX + CELL_SIZE;
-				Integer gridY2 = gridY + CELL_SIZE;
+				Integer gridX = (currentCell.getColumn() * (CELL_SIZE + WALL_THICKNESS)) + MAZE_BORDER;
+				Integer gridY = (currentCell.getRow() * (CELL_SIZE + WALL_THICKNESS)) + MAZE_BORDER;
+				Integer gridX2 = gridX + CELL_SIZE + WALL_THICKNESS;
+				Integer gridY2 = gridY + CELL_SIZE + WALL_THICKNESS;
 				// Check linked cells
 				// We only have to check two directions for links as they will handle drawing all the walls
 				if(currentCell.getNorth() == null) {

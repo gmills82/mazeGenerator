@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Grant Mills
@@ -13,6 +14,7 @@ public class Grid {
 	private List<List<Cell>> grid;
 	private Integer rowSize;
 	private Integer columnSize;
+	private Integer size;
 
 	/**
 	 *
@@ -22,6 +24,7 @@ public class Grid {
 	public Grid(Integer rowSize, Integer columnSize) {
 		this.rowSize = rowSize;
 		this.columnSize = columnSize;
+		this.size = rowSize * columnSize;
 
 		//Create a 2d grid of cells
 		createGrid(rowSize, columnSize);
@@ -68,9 +71,9 @@ public class Grid {
 	 * if the cell doesn't exist in this grid
 	 * @param row
 	 * @param column
-	 * @return
+	 * @return - {@link Optional<Cell>} optional cell if present in grid
 	 */
-	private Optional<Cell> doesCellExistInGrid(Integer row, Integer column){
+	public Optional<Cell> doesCellExistInGrid(Integer row, Integer column){
 		Cell checkedCell=null;
 
 		if(row >= 0 && row < grid.size()) {
@@ -85,6 +88,16 @@ public class Grid {
 		return checkedCellOptional;
 	}
 
+	/**
+	 * Returns a random cell from the maze
+	 * @return - {@link Cell} random cell
+	 */
+	public Cell getRandomCell() {
+		Integer rowValue = ThreadLocalRandom.current().nextInt(0, this.rowSize);
+		Integer columnValue = ThreadLocalRandom.current().nextInt(0, this.columnSize);
+		return this.grid.get(rowValue).get(columnValue);
+	}
+
 	public List<List<Cell>> getGrid() {
 		return grid;
 	}
@@ -95,5 +108,9 @@ public class Grid {
 
 	public Integer getColumnSize() {
 		return columnSize;
+	}
+
+	public Integer getSize() {
+		return size;
 	}
 }

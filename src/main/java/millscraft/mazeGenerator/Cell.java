@@ -3,9 +3,11 @@ package millscraft.mazeGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Grant Mills
@@ -90,6 +92,12 @@ public class Cell {
 
 	public Boolean isLinked(Cell testCell) {
 		return this.getLinkedCells().contains(testCell);
+	}
+
+	public Cell getRandomNeighbor() {
+		Integer randomDirection = ThreadLocalRandom.current().nextInt(0,this.neighbors.size());
+		ArrayList<Cell> neighborCells = new ArrayList<>(this.neighbors.values());
+		return neighborCells.get(randomDirection);
 	}
 
 	public Set<Cell> getLinkedCells() {
