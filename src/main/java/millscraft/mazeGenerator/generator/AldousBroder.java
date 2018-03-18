@@ -24,12 +24,13 @@ public class AldousBroder implements GeneratorAlgorithm {
 			//Get a random neighboring cell
 			Cell randomNeighbor = currentCell.getRandomNeighbor();
 
-			//If the current cell and the randomNeighbor are not already linked
-			if(!currentCell.isLinked(randomNeighbor)) {
+			//If the random neighbor cell has no existing links then link it to the current cell
+			if(currentCell.getLinkedCells().isEmpty()) {
 				//Link them and decrement the count of unvisited cells
 				currentCell.link(randomNeighbor);
 				unvisitedCells -= 1;
 			}
+
 			//Either way make the random neighbor cell the current cell
 			currentCell = randomNeighbor;
 		}
