@@ -6,6 +6,8 @@ import millscraft.mazeGenerator.Grid;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * A very simple algorithm for generating a maze.
+ * Its bias creates a maze with an empty top row and right column.
  * @author Grant Mills
  * @since 3/9/18
  */

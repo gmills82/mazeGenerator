@@ -4,6 +4,8 @@ import millscraft.mazeGenerator.Cell;
 import millscraft.mazeGenerator.Grid;
 
 /**
+ * The Aldous-Broder algorithm for creating a maze takes a VERY long time
+ * to complete, due to its circuitous and random nature.
  * @author Grant Mills
  * @since 3/18/18
  */

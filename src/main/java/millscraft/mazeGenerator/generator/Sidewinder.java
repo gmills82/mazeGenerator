@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
+ * The Sidewinder algorithm creates mazes with long horizontal tunnels.
+ * Its bias creates an empty row at the top and a mostly empty column on
+ * the right side of the maze.
  * @author Grant Mills
  * @since 3/9/18
  */
