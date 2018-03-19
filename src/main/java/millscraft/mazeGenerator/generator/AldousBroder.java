@@ -4,7 +4,7 @@ import millscraft.mazeGenerator.Cell;
 import millscraft.mazeGenerator.Grid;
 
 /**
- * The Aldous-Broder algorithm for creating a maze takes a VERY long time
+ * The Aldous-Broder algorithm for creating a maze takes a long time
  * to complete, due to its circuitous and random nature.
  * @author Grant Mills
  * @since 3/18/18
@@ -27,9 +27,9 @@ public class AldousBroder implements GeneratorAlgorithm {
 			Cell randomNeighbor = currentCell.getRandomNeighbor();
 
 			//If the random neighbor cell has no existing links then link it to the current cell
-			if(currentCell.getLinkedCells().isEmpty()) {
+			if(randomNeighbor.getLinkedCells().isEmpty()) {
 				//Link them and decrement the count of unvisited cells
-				currentCell.link(randomNeighbor);
+				randomNeighbor.link(currentCell);
 				unvisitedCells -= 1;
 			}
 
