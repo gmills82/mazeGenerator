@@ -31,7 +31,8 @@ public class Wilson implements GeneratorAlgorithm{
 				//erase the loop
 				if(path.contains(currentPathCell)) {
 					Integer index = path.indexOf(currentPathCell);
-					for(int x = index; x <= path.size(); x++) {
+					Integer pathSize = path.size();
+					for(int x = pathSize-1; x > index; x--) {
 						path.remove(x);
 					}
 				}else {
@@ -51,8 +52,13 @@ public class Wilson implements GeneratorAlgorithm{
 
 					//Link, set as visited, and decrement unvisited count
 					previous.link(current);
-					current.setVisited(true);
-					cellsUnvisited -= 1;
+
+					//Set as visited and decrement unvisited count unless its the last cell
+					//in the path, which has already been visited
+					if(it.hasNext()) {
+						current.setVisited(true);
+						cellsUnvisited -= 1;
+					}
 
 					previous = current;
 				}

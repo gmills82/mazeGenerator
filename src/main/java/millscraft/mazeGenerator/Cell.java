@@ -1,5 +1,6 @@
 package millscraft.mazeGenerator;
 
+import millscraft.mazeGenerator.exception.CellLinkException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,13 +52,19 @@ public class Cell {
 	public void link(Cell cellToBeLinked, Boolean isBiDirectional) {
 
 		if(null != cellToBeLinked) {
-			this.linkedCells.add(cellToBeLinked);
-			if (isBiDirectional) {
-				Set<Cell> currentlyLinked = cellToBeLinked.getLinkedCells();
-				if (!currentlyLinked.contains(this)) {
-					currentlyLinked.add(this);
-					cellToBeLinked.setLinkedCells(currentlyLinked);
+			//Only neighboring cells can be linked
+			if(this.getNeighbors().containsValue(cellToBeLinked)) {
+				this.linkedCells.add(cellToBeLinked);
+
+				if (isBiDirectional) {
+					Set<Cell> currentlyLinked = cellToBeLinked.getLinkedCells();
+					if (!currentlyLinked.contains(this)) {
+						currentlyLinked.add(this);
+						cellToBeLinked.setLinkedCells(currentlyLinked);
+					}
 				}
+			}else {
+				throw new CellLinkException("Cells cannot be linked. Cell 1 is at row:" + this.getRow() + " col:" + this.getColumn() + ". Cell 2 is at row:" + cellToBeLinked.getRow() + " col:" + cellToBeLinked.getColumn() + ".");
 			}
 		}else {
 			logger.info("Null cell was skipped and not linked");
