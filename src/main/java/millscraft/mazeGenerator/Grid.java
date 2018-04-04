@@ -88,6 +88,7 @@ public class Grid {
 		return checkedCellOptional;
 	}
 
+
 	/**
 	 * Returns a random cell from the maze
 	 * @return - {@link Cell} random cell
@@ -96,6 +97,22 @@ public class Grid {
 		Integer rowValue = ThreadLocalRandom.current().nextInt(0, this.rowSize);
 		Integer columnValue = ThreadLocalRandom.current().nextInt(0, this.columnSize);
 		return this.grid.get(rowValue).get(columnValue);
+	}
+
+	public Cell getRandomUnlinkedCell() {
+		Cell possibleCell = this.getRandomCell();
+		while(!possibleCell.getLinkedCells().isEmpty()) {
+			possibleCell = this.getRandomCell();
+		}
+		return possibleCell;
+	}
+
+	public Cell getRandomUnvisitedCell() {
+		Cell possibleCell = this.getRandomCell();
+		while(possibleCell.hasBeenVisited()) {
+			possibleCell = this.getRandomCell();
+		}
+		return possibleCell;
 	}
 
 	public List<List<Cell>> getGrid() {

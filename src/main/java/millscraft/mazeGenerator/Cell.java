@@ -24,6 +24,7 @@ public class Cell {
 	private Cell east;
 	private Cell west;
 	private EnumMap<Direction, Cell> neighbors;
+	private Boolean visited = false;
 
 	public Cell(Integer row, Integer column) {
 		this.row = row;
@@ -154,5 +155,13 @@ public class Cell {
 
 	public EnumMap<Direction, Cell> getNeighbors() {
 		return neighbors;
+	}
+
+	public Boolean hasBeenVisited() {
+		return visited;
+	}
+
+	public void setVisited(Boolean visited) {
+		this.visited = visited;
 	}
 }
