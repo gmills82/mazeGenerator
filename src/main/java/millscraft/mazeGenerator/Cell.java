@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -106,6 +108,50 @@ public class Cell {
 		Integer randomDirection = ThreadLocalRandom.current().nextInt(0,this.neighbors.size());
 		ArrayList<Cell> neighborCells = new ArrayList<>(this.neighbors.values());
 		return neighborCells.get(randomDirection);
+	}
+
+	/**
+	 * Returns an Optional<Cell> with a value of an unvisited Cell
+	 * If all neighbor cells are visited the optional will be empty
+	 *
+	 * @return {@link Optional<Cell>}
+	 */
+	public Optional<Cell> getRandomUnvisitedNeighbor() {
+		Optional<Cell> optionalCell;
+
+		List<Cell> unvisitedNeighbors = new ArrayList<>();
+		for(Cell cell : this.getNeighbors().values()) {
+			if(cell.visited.equals(false)) {
+				unvisitedNeighbors.add(cell);
+			}
+		}
+		if(unvisitedNeighbors.isEmpty()) {
+			optionalCell = Optional.empty();
+		}else {
+			Integer randomIndex = ThreadLocalRandom.current().nextInt(0,unvisitedNeighbors.size());
+			optionalCell = Optional.of(unvisitedNeighbors.get(randomIndex));
+		}
+
+		return optionalCell;
+	}
+
+	public Optional<Cell> getRandomVisitedNeighbor() {
+		Optional<Cell> optionalCell;
+
+		List<Cell> unvisitedNeighbors = new ArrayList<>();
+		for(Cell cell : this.getNeighbors().values()) {
+			if(cell.visited.equals(true)) {
+				unvisitedNeighbors.add(cell);
+			}
+		}
+		if(unvisitedNeighbors.isEmpty()) {
+			optionalCell = Optional.empty();
+		}else {
+			Integer randomIndex = ThreadLocalRandom.current().nextInt(0,unvisitedNeighbors.size());
+			optionalCell = Optional.of(unvisitedNeighbors.get(randomIndex));
+		}
+
+		return optionalCell;
 	}
 
 	public Set<Cell> getLinkedCells() {
