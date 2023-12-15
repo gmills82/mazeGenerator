@@ -23,9 +23,9 @@ import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 public class ImageRendererImpl implements Renderer<File> {
 
 	private static final Logger logger = LoggerFactory.getLogger(ImageRendererImpl.class);
-	private Integer cellSize = 10;
-	private Integer mazeBorder = 10;
-	private Integer wallThickness = 1;
+	private Integer cellSize = 15;
+	private Integer mazeBorder = cellSize * 2;
+	private Integer wallThickness = 5;
 	private Color backgroundColor = Color.WHITE;
 	private Color wallColor = Color.BLACK;
 
