@@ -1,5 +1,6 @@
 package millscraft.mazeGenerator.render;
 
+import millscraft.mazeGenerator.Direction;
 import millscraft.mazeGenerator.Grid;
 
 /**
@@ -8,5 +9,5 @@ import millscraft.mazeGenerator.Grid;
  */
 public interface Renderer<T> {
 
-	T render(Grid maze);
+	T render(Grid maze, Direction startSide, Direction endSide);
 }

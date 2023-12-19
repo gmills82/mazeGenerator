@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -53,7 +54,11 @@ public class ImageRendererImpl implements Renderer<File> {
 		}
 	}
 
-	private File doRender(Grid maze) {
+	private File doRender(Grid maze, Direction startSide, Direction endSide) {
+		if (startSide.equals(endSide)) {
+			throw new IllegalArgumentException("Starting side and ending side cannot be the same.");
+		}
+
 		int imageWidth = (mazeBorder * 2) + ((cellSize + wallThickness) * maze.getColumnSize()) + wallThickness;
 		int imageHeigth = (mazeBorder * 2) + ((cellSize + wallThickness) * maze.getRowSize()) + wallThickness;
 
@@ -98,31 +103,8 @@ public class ImageRendererImpl implements Renderer<File> {
 			}
 		}
 
-		//TODO: Make it possible to set opening and ending direction N,E,S,W
-		//TODO: Right now it's always top and bottom
-		//Starting Line
-		//Draw random start line over wall border with background color
-		List<Cell> topRow = maze.getGrid().get(0);
-		int randomCellValue = ThreadLocalRandom.current().nextInt(0, topRow.size() - 1);
-		Cell startCell = topRow.get(randomCellValue);
-
-		//Stroke for the starting opening of the maze cells
-		graphics2D.setColor(backgroundColor);
-		BasicStroke basicBackgroundStroke = new BasicStroke(wallThickness);
-		graphics2D.setStroke(basicStroke);
-
-		//Draw opening line
-		drawInteriorWall(graphics2D, startCell, Direction.NORTH);
-
-		//Ending Line
-		//Draw random end line over wall border with background color
-		List<Cell> bottomRow = maze.getGrid().get(maze.getRowSize() - 1);
-		int randomCellValue2 = ThreadLocalRandom.current().nextInt(0, bottomRow.size() - 1);
-		Cell endingCell = bottomRow.get(randomCellValue2);
-
-		//Draw ending line
-		drawInteriorWall(graphics2D, endingCell, Direction.SOUTH);
-
+		//Draw start and ending line
+		drawEntranceAndExit(maze, graphics2D, startSide, endSide);
 
 		//Output file
 		File outputFile = new File("testMaze.png");
@@ -135,6 +117,54 @@ public class ImageRendererImpl implements Renderer<File> {
 		}
 
 		return outputFile;
+	}
+
+	private void drawEntranceAndExit(Grid maze, Graphics2D graphics2D, Direction startSide, Direction endSide) {
+		//Stroke for the openings and exits of the maze cells
+		graphics2D.setColor(backgroundColor);
+		BasicStroke basicBackgroundStroke = new BasicStroke(wallThickness);
+		graphics2D.setStroke(basicBackgroundStroke);
+
+		if (startSide.equals(Direction.NORTH) || endSide.equals(Direction.NORTH)) {
+			//Northern line
+			//Draw random start line over wall border with background color
+			List<Cell> topRow = maze.getGrid().get(0);
+			int randomCellValue = ThreadLocalRandom.current().nextInt(0, topRow.size() - 1);
+			Cell cell = topRow.get(randomCellValue);
+
+			//Draw opening line
+			drawInteriorWall(graphics2D, cell, Direction.NORTH);
+		}
+		if (startSide.equals(Direction.EAST) || endSide.equals(Direction.EAST)) {
+			List<Cell> leftMostCells = new ArrayList<>();
+			for (List<Cell> cellList : maze.getGrid()) {
+				leftMostCells.add(cellList.get(0));
+			}
+			int randomCellValue = ThreadLocalRandom.current().nextInt(0, leftMostCells.size() - 1);
+			Cell cell = leftMostCells.get(randomCellValue);
+
+			drawInteriorWall(graphics2D, cell, Direction.EAST);
+		}
+		if (startSide.equals(Direction.SOUTH) || endSide.equals(Direction.SOUTH)) {
+			//Ending Line
+			//Draw random end line over wall border with background color
+			List<Cell> bottomRow = maze.getGrid().get(maze.getRowSize() - 1);
+			int randomCellValue = ThreadLocalRandom.current().nextInt(0, bottomRow.size() - 1);
+			Cell cell = bottomRow.get(randomCellValue);
+
+			//Draw ending line
+			drawInteriorWall(graphics2D, cell, Direction.SOUTH);
+		}
+		if (startSide.equals(Direction.WEST) || endSide.equals(Direction.WEST)) {
+			List<Cell> rightMostCells = new ArrayList<>();
+			for (List<Cell> cellList : maze.getGrid()) {
+				rightMostCells.add(cellList.get(cellList.size() - 1));
+			}
+			int randomCellValue = ThreadLocalRandom.current().nextInt(0, rightMostCells.size() - 1);
+			Cell cell = rightMostCells.get(randomCellValue);
+
+			drawInteriorWall(graphics2D, cell, Direction.WEST);
+		}
 	}
 
 	private void drawWall(Graphics2D graphics2D, Cell cell, Direction direction) {
@@ -185,15 +215,29 @@ public class ImageRendererImpl implements Renderer<File> {
 				gridY2 = gridY + cellSize;
 				graphics2D.drawLine(gridX, gridY2, gridX2, gridY2);
 				break;
+			case EAST:
+				//Draw left wall
+				gridX = (cell.getColumn() * (cellSize + wallThickness)) + mazeBorder;
+				gridY = (cell.getRow() * (cellSize + wallThickness)) + mazeBorder + wallThickness;
+				gridY2 = gridY + cellSize - wallThickness;
+				graphics2D.drawLine(gridX, gridY, gridX, gridY2);
+				break;
+			case WEST:
+				//Draw right wall
+				gridX = (cell.getColumn() * (cellSize + wallThickness)) + mazeBorder + cellSize + wallThickness;
+				gridY = (cell.getRow() * (cellSize + wallThickness)) + mazeBorder + wallThickness;
+				gridY2 = gridY + cellSize - wallThickness;
+				graphics2D.drawLine(gridX, gridY, gridX, gridY2);
+				break;
 		}
 	}
 
 	@Override
-	public File render(Grid maze) {
+	public File render(Grid maze, Direction startSide, Direction endSide) {
 		if (maze == null) {
 			throw new IllegalArgumentException();
 		} else {
-			return doRender(maze);
+			return doRender(maze, startSide, endSide);
 		}
 	}
 
